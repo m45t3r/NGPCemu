@@ -1,6 +1,6 @@
 PRGNAME     = ngpcemu
-CC			= /opt/bittboy-toolchain/bin/arm-linux-gcc
-CXX			= /opt/bittboy-toolchain/bin/arm-linux-g++
+CC			= /opt/miyoo/bin/arm-linux-gcc
+CXX			= /opt/miyoo/bin/arm-linux-g++
 
 #### Configuration
 
@@ -21,10 +21,10 @@ INCLUDES	= -Imednafen/include -I./ -I./mednafen -I./mednafen/hw_cpu/z80-fuse -I.
 INCLUDES	+= -Ishell/headers -Ishell/video/$(PORT) -Ishell/audio -Ishell/scalers -Ishell/input/sdl -Ishell/fonts -Ishell/menu/$(MENU)
 
 DEFINES		= -DLSB_FIRST -DWANT_16BPP -DFRONTEND_SUPPORTS_RGB565 -DINLINE="inline"
-DEFINES		+= -DSIZEOF_DOUBLE=8 $(WARNINGS) -DMEDNAFEN_VERSION=\"0.9.31\" -DPACKAGE=\"mednafen\" -DMEDNAFEN_VERSION_NUMERIC=931 -DPSS_STYLE=1 -DMPC_FIXED_POINT -DSTDC_HEADERS -D__STDC_LIMIT_MACROS -D_LOW_ACCURACY_
+DEFINES		+= -DSIZEOF_DOUBLE=8 $(WARNINGS) -DMEDNAFEN_VERSION=\"0.9.31\" -DPACKAGE=\"mednafen\" -DMEDNAFEN_VERSION_NUMERIC=931 -DPSS_STYLE=1 -DMPC_FIXED_POINT -DSTDC_HEADERS -D__STDC_LIMIT_MACROS -D_LOW_ACCURACY_ -DFRAMESKIP
 DEFINES		+= -DGIT_VERSION=\"$(GIT_VERSION)\" -DNOAVERAGING -DBLARGG_DISABLE_NOTHROW -DNDEBUG -DBITTBOY -DBLIP_LOW_QUALITY
-   
-CFLAGS		= -Wall -Wextra -O1 -fdata-sections -ffunction-sections -fsingle-precision-constant -fno-common -fno-PIC -march=armv5te -mtune=arm926ej-s
+
+CFLAGS		= -Wall -Wextra -Ofast -fdata-sections -ffunction-sections -fsingle-precision-constant -fno-common -fno-PIC -march=armv5te -mtune=arm926ej-s
 CFLAGS		+= $(INCLUDES) $(DEFINES)
 ifeq ($(PROFILE), YES)
 CFLAGS 		+= -fprofile-generate=/mnt/profile
@@ -40,7 +40,7 @@ LDFLAGS		+= -lgcov
 endif
 
 ifeq ($(SOUND_ENGINE), portaudio)
-LDFLAGS 		+= -lportaudio 
+LDFLAGS 		+= -lportaudio
 endif
 
 # Files to be compiled
@@ -55,9 +55,9 @@ OBJ_CPP		= $(notdir $(patsubst %.cpp, %.o, $(SRC_CPP)))
 OBJS		= $(OBJ_C) $(OBJ_CPP)
 
 # Rules to make executable
-$(PRGNAME): $(OBJS)  
+$(PRGNAME): $(OBJS)
 	$(CC) $(CFLAGS) -std=gnu99 -o $(PRGNAME) $^ $(LDFLAGS)
-	
+
 $(OBJ_CPP) : %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
