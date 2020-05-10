@@ -15,6 +15,14 @@
 #include "config.h"
 #include "menu.h"
 
+#ifdef BITTBOY
+#define CONFIRM_BUTTON SDLK_LALT
+#define BACK_BUTTON SDLK_LCTRL
+#else
+#define CONFIRM_BUTTON SDLK_LCTRL
+#define BACK_BUTTON SDLK_LALT
+#endif
+
 extern SDL_Surface *sdl_screen;
 extern char GameName_emu[512];
 
@@ -70,11 +78,15 @@ static void config_load()
 		option.config_buttons[1] = 274;
 		option.config_buttons[2] = 276;
 		option.config_buttons[3] = 275;
-		
+#ifdef BITTBOY
+		option.config_buttons[4] = 308;
+		option.config_buttons[5] = 306;
+		option.config_buttons[6] = 13;
+#else
 		option.config_buttons[4] = 306;
 		option.config_buttons[5] = 308;
 		option.config_buttons[6] = 13;
-		
+#endif
 		option.fullscreen = 1;
 	}
 }
@@ -113,6 +125,15 @@ static const char* Return_Text_Button(uint32_t button)
 		case 275:
 			return "DPAD RIGHT";
 		break;
+#ifdef BITTBOY
+		/* A button */
+		case 308:
+			return "A button";
+		break;
+		/* B button */
+		case 306:
+			return "B button";
+#else
 		/* A button */
 		case 306:
 			return "A button";
@@ -120,6 +141,7 @@ static const char* Return_Text_Button(uint32_t button)
 		/* B button */
 		case 308:
 			return "B button";
+#endif
 		break;
 		/* X button */
 		case 304:
@@ -202,14 +224,14 @@ static void Input_Remapping()
 							currentselection = 1;
 						}
                         break;
-                    case SDLK_LCTRL:
+                    case CONFIRM_BUTTON:
                     case SDLK_RETURN:
                         pressed = 1;
 					break;
                     case SDLK_ESCAPE:
                         option.config_buttons[currentselection - 1] = 0;
 					break;
-                    case SDLK_LALT:
+                    case BACK_BUTTON:
                         exit_input = 1;
 					break;
                     case SDLK_BACKSPACE:
@@ -390,11 +412,11 @@ void Menu()
                         break;
                     case SDLK_END:
                     case SDLK_RCTRL:
-                    case SDLK_LALT:
+		    case BACK_BUTTON:
 						pressed = 1;
 						currentselection = 1;
 						break;
-                    case SDLK_LCTRL:
+                    case CONFIRM_BUTTON:
                     case SDLK_RETURN:
                         pressed = 1;
                         break;

@@ -27,9 +27,9 @@ DEFINES		+= -DGIT_VERSION=\"$(GIT_VERSION)\" -DNOAVERAGING -DBLARGG_DISABLE_NOTH
 CFLAGS		= -Wall -Wextra -Ofast -fdata-sections -ffunction-sections -fsingle-precision-constant -fno-common -fno-PIC -march=armv5te -mtune=arm926ej-s
 CFLAGS		+= $(INCLUDES) $(DEFINES)
 ifeq ($(PROFILE), YES)
-CFLAGS 		+= -fprofile-generate=/mnt/profile
+CFLAGS 		+= -fprofile-generate=./profile
 else ifeq ($(PROFILE), APPLY)
-CFLAGS		+= -fprofile-use
+CFLAGS		+= -fprofile-use -fprofile-dir=./profile
 endif
 
 CXXFLAGS	= $(CFLAGS) -fno-rtti -fno-exceptions  -std=gnu++03
